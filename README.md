@@ -17,6 +17,6 @@ ssh -F .ssh/config someinternalhost
 
 ### Данные для проверки
 ```
-bastion_IP=104.155.68.235
-someinternalhost_IP=10.132.0.2
+bastion_IP = 104.155.68.235
+someinternalhost_IP = 10.132.0.2
 ```
