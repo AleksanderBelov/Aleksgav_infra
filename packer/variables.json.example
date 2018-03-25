@@ -1,0 +1,13 @@
+{
+  "project_id": null,
+  "source_image_family": null,
+  "machine_type": "f1-micro",
+  "image_description": "Reddit monolit app",
+  "disk_type": "pd-standard",
+  "disk_size": "10",
+  "network": "default",
+  "tags": [
+    "puma-default-server",
+    "reddit"
+  ]
+}
