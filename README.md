@@ -1,6 +1,14 @@
 # Aleksgav_infra
 Aleksgav Infra repository
 
+## HOMEWORK 5
+
+Установлен Packer
+Создан шаблон для базового образа ubuntu16
+Параметризирован шаблон
+Создан immutable шаблон
+Создан скрипт для создания инстанса из immutable шаблона
+
 ## HOMEWORK 4
 
 Стартап скрипт
