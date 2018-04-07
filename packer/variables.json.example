@@ -1,13 +1,10 @@
 {
-  "project_id": null,
-  "source_image_family": null,
+  "project_id": "infra-198222",
+  "source_image_family": "ubuntu-1604-lts",
   "machine_type": "f1-micro",
   "image_description": "Reddit monolit app",
   "disk_type": "pd-standard",
   "disk_size": "10",
   "network": "default",
-  "tags": [
-    "puma-default-server",
-    "reddit"
-  ]
+  "tags": "'puma-default-server', 'reddit'"
 }
