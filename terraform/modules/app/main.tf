@@ -1,15 +1,3 @@
-provider "google" {
-  version = "1.4.0"
-  project = "${var.project}"
-  region  = "${var.region}"
-}
-
-resource "google_compute_project_metadata" "default" {
-  metadata {
-    ssh-keys = "appuser1:${file(var.public_key_path)} appuser2:${file(var.public_key_path)} appuser3:${file(var.public_key_path)}"
-  }
-}
-
 resource "google_compute_instance" "app" {
   name         = "reddit-app-${count.index}"
   machine_type = "g1-small"
@@ -19,7 +7,7 @@ resource "google_compute_instance" "app" {
 
   boot_disk {
     initialize_params {
-      image = "${var.disk_image}"
+      image = "${var.app_disk_image}"
     }
   }
 
@@ -28,8 +16,11 @@ resource "google_compute_instance" "app" {
   }
 
   network_interface {
-    network       = "default"
-    access_config = {}
+    network = "default"
+
+    access_config = {
+      nat_ip = "${google_compute_address.app_id.address}"
+    }
   }
 
   connection {
@@ -37,15 +28,16 @@ resource "google_compute_instance" "app" {
     user        = "appuser"
     agent       = false
     private_key = "${file(var.private_key_path)}"
+    timeout     = "2m"
   }
 
   provisioner "file" {
-    source      = "files/puma.service"
+    content     = "${data.template_file.reddit_app.rendered}"
     destination = "/tmp/puma.service"
   }
 
   provisioner "remote-exec" {
-    script = "files/deploy.sh"
+    script = "${path.module}/files/deploy.sh"
   }
 }
 
@@ -53,11 +45,15 @@ resource "google_compute_firewall" "firewall_puma" {
   name    = "allow-puma-default"
   network = "default"
 
+  source_ranges = ["0.0.0.0/0"]
+  target_tags   = ["reddit-app"]
+
   allow {
     protocol = "tcp"
     ports    = ["9292"]
   }
+}
 
-  source_ranges = ["0.0.0.0/0"]
-  target_tags   = ["reddit-app"]
+resource "google_compute_address" "app_id" {
+  name = "reddit-app-ip"
 }
