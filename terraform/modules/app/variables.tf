@@ -23,3 +23,8 @@ variable private_key_path {
 variable reddit_db_addr {
   description = "Internal DB IP"
 }
+
+variable is_deploy_app {
+  description = "Flag for deploying application"
+  default     = true
+}

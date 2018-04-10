@@ -22,23 +22,6 @@ resource "google_compute_instance" "app" {
       nat_ip = "${google_compute_address.app_id.address}"
     }
   }
-
-  connection {
-    type        = "ssh"
-    user        = "appuser"
-    agent       = false
-    private_key = "${file(var.private_key_path)}"
-    timeout     = "2m"
-  }
-
-  provisioner "file" {
-    content     = "${data.template_file.reddit_app.rendered}"
-    destination = "/tmp/puma.service"
-  }
-
-  provisioner "remote-exec" {
-    script = "${path.module}/files/deploy.sh"
-  }
 }
 
 resource "google_compute_firewall" "firewall_puma" {
@@ -56,4 +39,25 @@ resource "google_compute_firewall" "firewall_puma" {
 
 resource "google_compute_address" "app_id" {
   name = "reddit-app-ip"
+}
+
+resource "null_resource" "app" {
+  count = "${var.is_deploy_app ? 1 : 0}"
+
+  connection {
+    type        = "ssh"
+    user        = "appuser"
+    agent       = false
+    private_key = "${file(var.private_key_path)}"
+    timeout     = "2m"
+  }
+
+  provisioner "file" {
+    content     = "${data.template_file.reddit_app.rendered}"
+    destination = "/tmp/puma.service"
+  }
+
+  provisioner "remote-exec" {
+    script = "${path.module}/files/deploy.sh"
+  }
 }

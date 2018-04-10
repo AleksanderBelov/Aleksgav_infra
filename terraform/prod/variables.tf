@@ -27,3 +27,7 @@ variable app_disk_image {
 variable db_disk_image {
   description = "Desk image for reddit db"
 }
+
+variable is_deploy_app {
+  description = "Flag for deploying application"
+}

@@ -11,6 +11,7 @@ module "app" {
   app_disk_image   = "${var.app_disk_image}"
   private_key_path = "${var.private_key_path}"
   reddit_db_addr   = "${module.db.db_internal_ip}"
+  is_deploy_app       = "${var.is_deploy_app}"
 }
 
 module "db" {
