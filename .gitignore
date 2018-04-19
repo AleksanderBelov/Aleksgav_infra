@@ -8,4 +8,7 @@ packer/variables.json
 *.tfvars
 .terraform/
 
+# Ansible
+*.retry
+
 .todo
