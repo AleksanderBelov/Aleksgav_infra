@@ -37,6 +37,19 @@ resource "google_compute_firewall" "firewall_puma" {
   }
 }
 
+resource "google_compute_firewall" "http_default" {
+  name    = "allow-http-default"
+  network = "default"
+
+  source_ranges = ["0.0.0.0/0"]
+  target_tags   = ["reddit-app"]
+
+  allow {
+    protocol = "tcp"
+    ports    = ["80"]
+  }
+}
+
 resource "google_compute_address" "app_id" {
   name = "reddit-app-ip"
 }
