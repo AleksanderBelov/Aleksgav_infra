@@ -1,0 +1,13 @@
+---
+- name: Configure application
+  hosts: app
+  become: true
+
+  roles:
+    - app
+    - role: jdauphant.nginx
+      nginx_sites:
+        default:
+          - listen {{ nginx_app_listen_port }}
+          - server_name {{ nginx_app_server_name }}
+          - location / { proxy_pass {{ nginx_app_locataion_proxy_pass }}; }

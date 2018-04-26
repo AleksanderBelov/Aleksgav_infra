@@ -1,0 +1,4 @@
+db_host: 10.132.0.2
+nginx_app_listen_port: 80
+nginx_app_server_name: reddit
+nginx_app_locataion_proxy_pass: http://127.0.0.1:9292
