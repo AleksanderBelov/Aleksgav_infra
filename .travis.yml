@@ -1,9 +1,76 @@
 dist: trusty
 sudo: required
-language: bash
+language: python
+python: "2.7"
+
+env:
+  global:
+    - ANSIBLE_VERSION=2.5.0
+    - ANSIBLE_LINT_VERSION=3.4.21
+    - PACKER_VERSION=1.2.1
+    - TERRAFORM_VERSION=0.11.5
+    - TFLINT_VERSION=0.5.4
+    - BIN_DIR=~/bin
+    - TEMP_DIR=~/tmp
+
+  matrix:
+    - USE_ENV=stage
+    - USE_ENV=prod
+
+# execute all of the commands which need to be executed
+# before installing dependencies
 before_install:
-- curl https://raw.githubusercontent.com/express42/otus-homeworks/2018-02/run.sh |
-  bash
+  - curl https://raw.githubusercontent.com/express42/otus-homeworks/2018-02/run.sh | bash
+  - sudo apt-get update
+  - mkdir ${TEMP_DIR}
+
+# install all of the dependencies you need here
+install:
+  # install ansible
+  - sudo pip install ansible==${ANSIBLE_VERSION}
+
+  # install ansible-lint
+  - sudo pip install ansible-lint==${ANSIBLE_LINT_VERSION}
+
+  # install packer
+  - cd ${TEMP_DIR}
+  - curl -O https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip
+  - unzip ${TEMP_DIR}/packer_${PACKER_VERSION}_linux_amd64.zip -d ${BIN_DIR}
+  - rm ${TEMP_DIR}/packer_${PACKER_VERSION}_linux_amd64.zip
+
+  # install terraform
+  - cd ${TEMP_DIR}
+  - curl -O https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+  - unzip ${TEMP_DIR}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d ${BIN_DIR}
+  - rm ${TEMP_DIR}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+
+  # install tflint
+  - cd ${TEMP_DIR}
+  - curl -OL https://github.com/wata727/tflint/releases/download/v${TFLINT_VERSION}/tflint_linux_amd64.zip
+  - unzip ${TEMP_DIR}/tflint_linux_amd64.zip -d ${BIN_DIR}
+  - rm ${TEMP_DIR}/tflint_linux_amd64.zip
+
+# execute all of the commands which need to be executed
+# before running actual tests
+before_script:
+  - touch ~/.ssh/{appuser.pub,appuser}
+
+# execute all of the commands which should make the build pass or fail
+script:
+  # validate packer templates
+  - cd ${TRAVIS_BUILD_DIR}/packer
+  - for f in *.json; do ${BIN_DIR}/packer validate -var-file=variables.json.example ${f}; done
+
+  # validate ansible playbooks
+  - cd ${TRAVIS_BUILD_DIR}/ansible
+  - for f in playbooks/*.yml; do ansible-lint ${f}; done
+
+  # validate terraform & tflint
+  - cd ${TRAVIS_BUILD_DIR}/terraform/${USE_ENV}
+  - ${BIN_DIR}/terraform init -backend=false
+  - ${BIN_DIR}/terraform validate -var-file=terraform.tfvars.example
+  - ${BIN_DIR}/tflint --var-file=terraform.tfvars.example
+
 notifications:
   slack:
     secure: h7jAz4hztwJkCppBctHp0rWXGcODUSKB8BUU60/PAsYjoU46y6GTxDQyi98csFmBGqofbT2jfip0QlZSXp/ffpcVyw72TwT66GzgEjTpdsL0WuC4E4ixufgez0QOo6G4Yw5AMrlJrIU8u1dpO8JA/t/IPYSYJj3JlrMer7d9EyWd1EjH66EUcvImixTtCr7YCnsb4FaoiwG72OeXAgDFWbYos4npdxQ9oCxwybJEI4hBIMNn0pMPl8uAZBOfC0nRJB0H9gD9YILCNqVU1eLeg+AhBIcRCrHn3f/IFCHtL5dVpD3tZ5KdJEdiwsJXpUyEMS67dwdX1xN8gTOUUDCs3VvRBdCCNdpi8VfGNx7VaNDu8VYr+0xKputiqBUBEHAtW9osimiPOwy+L5AVTfCm9Zawa0bqE4BQZoXsunv/4rOsEL+NE/hy+VFPpEq1F10d0hMh1ybQ91r3yWiyhyJYi1+7lM6TFeyunOm46+xQVZTS7uOPUbM7oQA1hVHvLQv7SGk4XVw/6oUID2mcy5aeHix3tAvNm80TLokBJJiv/IblDnGRDMcpkaVTBpYL/DUOtfgjjbHgys7zdia6vdw/ZRjLCehEmFzWtZ0NMwjSHjyhklCu88JsAjsoj3y86bCWlSr2Aot4wS0oMsSheoVKeT/vZCHZ7fO/9TVEgGEIB6I=

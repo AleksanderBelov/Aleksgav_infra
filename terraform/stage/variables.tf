@@ -30,4 +30,5 @@ variable db_disk_image {
 
 variable is_deploy_app {
   description = "Flag for deploying application"
+  default     = true
 }
