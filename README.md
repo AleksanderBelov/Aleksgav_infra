@@ -1,6 +1,23 @@
 # Aleksgav_infra
 Aleksgav Infra repository
 
+Master: [![Build Status](https://travis-ci.org/Otus-DevOps-2018-02/Aleksgav_infra.svg?branch=master)](https://travis-ci.org/Otus-DevOps-2018-02/Aleksgav_infra)
+
+## HOMEWORK 9
+
+Ansible-3: [![Build Status](https://travis-ci.org/Otus-DevOps-2018-02/Aleksgav_infra.svg?branch=ansible-3)](https://travis-ci.org/Otus-DevOps-2018-02/Aleksgav_infra)
+
+Перенес созданные плейбуки в отдельные роли
+Разделил на два окружения
+Добавил вывод информации об окружении
+Добавил коммюнити роль nginx
+Проверил плейбуки и роли на всех окружениях
+Добавил открытие 80 порта в терраформе
+Зашифровал секреты с помощью Ansible vault
+Вернул динамические инвентори
+Настроил валидацию в TravisCI
+
+
 ## HOMEWORK 9
 
 Создал плейбук для управления конфигурацией и деплоя
