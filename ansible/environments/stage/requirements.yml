@@ -1,3 +1,4 @@
 ---
 - src: jdauphant.nginx
   version: v2.13
+- src: git+https://github.com/Aleksgav/db
