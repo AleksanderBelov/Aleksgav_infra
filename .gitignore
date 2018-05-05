@@ -10,7 +10,18 @@ packer/variables.json
 
 # Ansible
 *.retry
-jdauphant.nginx
+ansible/roles/jdauphant.nginx
+ansible/roles/db
 vault.key
+
+# Vagrant & molecule
+.vagrant/
+*.log
+*.pyc
+.molecule
+.cache
+.pytest-cache
+
+*.pem
 
 .todo

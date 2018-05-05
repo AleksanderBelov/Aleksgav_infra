@@ -2,15 +2,5 @@
 - name: Prepare application image
   hosts: all
   become: true
-  tasks:
-    - name: Update cache
-      apt:
-        update_cache: true
-    - name: Install Ruby and Bundler
-      apt:
-        name: "{{ item }}"
-        state: present
-      loop:
-        - ruby-full
-        - ruby-bundler
-        - build-essential
+  roles:
+    - app

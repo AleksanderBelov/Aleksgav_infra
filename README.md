@@ -3,7 +3,29 @@ Aleksgav Infra repository
 
 Master: [![Build Status](https://travis-ci.org/Otus-DevOps-2018-02/Aleksgav_infra.svg?branch=master)](https://travis-ci.org/Otus-DevOps-2018-02/Aleksgav_infra)
 
-## HOMEWORK 9
+
+## HOMEWORK 11
+Установил Virtualbox & Vagrant
+Описал локальную инфраструктуру в Vagrant файле
+Добавил Ansible профижинер в Vagrant фаил
+Проверил профижинер
+Разделил роль db на отдельные файлы тасков
+Параметризовал роль
+Параметризовал unit фаил puma сервера
+Параметризовал deploy плейбук
+Дополнил кофигурацию Vagrant для корректной работы проксирования nginx
+Установил Molecule & Testinfra
+Создал тесты для роли db
+Описал тестовую машину
+Прогнал тесты - все ок
+Написал тест проверку - слушает ли mongo порт
+Добавил роли app и db в packer шаблоны
+Вынес роль в отдельный репозиторий
+Подкючил travis для этгго репозитория
+Настроил оповещения о билде в слак чат
+
+
+## HOMEWORK 10
 
 Ansible-3: [![Build Status](https://travis-ci.org/Otus-DevOps-2018-02/Aleksgav_infra.svg?branch=ansible-3)](https://travis-ci.org/Otus-DevOps-2018-02/Aleksgav_infra)
 
